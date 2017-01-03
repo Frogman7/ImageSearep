@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="ImageSearep.Views.ImageData.ImageDataView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ImageSearep.Views.ImageData"
+             xmlns:converters="clr-namespace:ImageSearep.Converters"
+             xmlns:views="clr-namespace:ImageSearep.Views"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance local:IImageDataViewmodel}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+        <converters:ImageToBitmapSourceConverter x:Key="BitmapSourceConverter"/>
+        <converters:NullToBoolean x:Key="NullToBoolean"/>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <views:HoverViewControl Grid.Row="1" HoverEnabled="{Binding NewImage, Converter={StaticResource NullToBoolean}}">
+            <views:HoverViewControl.DefaultDataTemplate>
+                <StackPanel>
+                    <TextBlock>Original Image</TextBlock>
+                    <Image Source="{Binding EmbeddedImage.ImageData.Image, Converter={StaticResource BitmapSourceConverter}}" Stretch="Uniform" 
+                                   VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </views:HoverViewControl.DefaultDataTemplate>
+            <views:HoverViewControl.HoverDataTemplate>
+                <StackPanel>
+                    <TextBlock>Replacement Image</TextBlock>
+                    <Grid x:Name="NewImageContainer">
+                        <Image Source="{Binding NewImage.Image, Converter={StaticResource BitmapSourceConverter}}" Stretch="Uniform" 
+                               MaxWidth="{Binding ElementName=NewImageContainer, Path=ActualWidth}"
+                               MaxHeight="{Binding ElementName=NewImageContainer, Path=ActualHeight}"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </views:HoverViewControl.HoverDataTemplate>
+        </views:HoverViewControl>
+
+        <Button Grid.Row="2" Content="Choose Replace Image" Command="{Binding LoadReplacementImageCommand}"/>
+        <Button Grid.Row="4" Content="Save Changes" Command="{Binding CommitImageChangesCommand}"/>
+    </Grid>
+</UserControl>
