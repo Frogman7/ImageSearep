@@ -85,11 +85,21 @@
                         {
                             if (this.HoverEnabled)
                             {
-                                hoverContentControl.Visibility = this.IsMouseOver ? Visibility.Visible : Visibility.Hidden;
+                                if (this.IsMouseOver)
+                                {
+                                    hoverContentControl.Visibility = Visibility.Visible;
+                                    defaultContentControl.Visibility = Visibility.Hidden;
+                                }
+                                else
+                                {
+                                    hoverContentControl.Visibility = Visibility.Hidden;
+                                    defaultContentControl.Visibility = Visibility.Visible;
+                                }
                             }
                             else
                             {
                                 hoverContentControl.Visibility = Visibility.Hidden;
+                                defaultContentControl.Visibility = Visibility.Visible;
                             }
                         });
 

@@ -4,10 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ImageSearep"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainWindowViewmodel}"
-        Title="MainWindow" Height="350" Width="525">
-    
-    <Grid>
-        <ContentControl Content="{Binding ViewNavigator.CurrentView}"/>
-    </Grid>
+        Title="Image Search and Replace" Height="350" Width="525">
+
+    <materialDesign:DialogHost IsOpen="{Binding ViewNavigator.ShowDialog, Mode=OneWay}">
+        <materialDesign:DialogHost.Content>
+            <ContentControl Content="{Binding ViewNavigator.CurrentView}"/>
+        </materialDesign:DialogHost.Content>
+        <materialDesign:DialogHost.DialogContent>
+            <StackPanel Margin="10">
+                <TextBlock Text="{Binding ViewNavigator.DialogMessage, Mode=OneWay}" FontSize="14" FontWeight="Black" Margin="0,0,0,10"/>
+                <Button Content="OK" Command="{Binding ViewNavigator.CloseDialog}"/>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+    </materialDesign:DialogHost>
 </Window>

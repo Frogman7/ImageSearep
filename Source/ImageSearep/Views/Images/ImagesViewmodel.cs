@@ -22,9 +22,10 @@
             this.GoBackCommand = new DelegateCommand(
                 () =>
                     {
-                        if (this.ViewFinished != null)
+                        if (this.OnViewFinished != null)
                         {
-                            this.ViewFinished(this, new EventArgs());
+                            this.fileHandle.Close();
+                            this.OnViewFinished(this, new EventArgs());
                         }
                     });
         }
@@ -37,21 +38,23 @@
 
         public ICommand GoBackCommand { get; }
 
-        public event EventHandler<PushViewEventArgs> ViewPushed;
+        public event EventHandler<PushViewEventArgs> OnViewPushed;
 
-        public event EventHandler ViewFinished;
+        public event EventHandler<NotifyUserEventArgs> OnNotifyUser;
+
+        public event EventHandler OnViewFinished;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IFileHandle fileHandle;
+        private readonly IFileHandle fileHandle;
 
         private void ViewSelectedImageDetail()
         {
             if (SelectedEmbeddedImage != null)
             {
-                if (this.ViewPushed != null)
+                if (this.OnViewPushed != null)
                 {
-                    this.ViewPushed(this, new PushViewEventArgs(new ImageDataView(new ImageDataViewmodel(this.fileHandle, this.SelectedEmbeddedImage))));
+                    this.OnViewPushed(this, new PushViewEventArgs(new ImageDataView(new ImageDataViewmodel(this.fileHandle, this.SelectedEmbeddedImage))));
                 }
             }
         }

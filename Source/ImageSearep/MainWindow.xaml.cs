@@ -14,7 +14,7 @@ namespace ImageSearep
         {
             this.InitializeComponent();
 
-            var viewNavigator = new ViewNavigator();
+            var viewNavigator = new ViewManager();
             this.DataContext = new MainWindowViewmodel(viewNavigator);
 
             viewNavigator.PushView(new StartView(new StartViewmodel()));

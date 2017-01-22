@@ -5,8 +5,10 @@
 
     public interface IViewmodel : INotifyPropertyChanged
     {
-        event EventHandler<PushViewEventArgs> ViewPushed;
+        event EventHandler<PushViewEventArgs> OnViewPushed;
 
-        event EventHandler ViewFinished;
+        event EventHandler<NotifyUserEventArgs> OnNotifyUser; 
+
+        event EventHandler OnViewFinished;
     }
 }

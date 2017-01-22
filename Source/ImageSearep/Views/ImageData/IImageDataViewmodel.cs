@@ -6,6 +6,8 @@
 
     public interface IImageDataViewmodel : IViewmodel
     {
+        bool Modified { get; }
+
         IImageData NewImage { get; }
 
         EmbeddedImageInfo EmbeddedImage { get; }
@@ -17,5 +19,7 @@
         ICommand CommitImageChangesCommand { get; }
 
         ICommand LoadReplacementImageCommand { get; }
+
+        ICommand GoBackCommand { get; }
     }
 }

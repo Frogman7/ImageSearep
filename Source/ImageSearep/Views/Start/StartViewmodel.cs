@@ -26,9 +26,11 @@
             this.ChosenFilePath = DefaultChoosenFileTextBoxText;
         }
 
-        public event EventHandler<PushViewEventArgs> ViewPushed;
+        public event EventHandler<PushViewEventArgs> OnViewPushed;
 
-        public event EventHandler ViewFinished;
+        public event EventHandler<NotifyUserEventArgs> OnNotifyUser;
+
+        public event EventHandler OnViewFinished;
 
         public string ChosenFilePath { get; private set; }
 
@@ -36,12 +38,17 @@
 
         public ICommand FindImagesInFileCommand { get; }
 
+        public bool Processing { get; private set; }
+
+        public bool FileSelected { get; private set; }
+
         private void SetChoosenFileFromFileOpenDialog()
         {
             var openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
             {
                 this.ChosenFilePath = openFileDialog.FileName;
+                this.FileSelected = true;
             }
         }
 
@@ -53,6 +60,8 @@
             {
                 if (fileHandle.Open())
                 {
+                    this.Processing = true;
+
                     var binaryData = fileHandle.GetBytes();
 
                     if (binaryData != null && binaryData.Length > 0)
@@ -61,11 +70,20 @@
 
                         var imageDatas = await pngImageFinder.FindImages(binaryData);
 
+                        this.Processing = false;
+
                         if (imageDatas.Any())
                         {
-                            if (this.ViewPushed != null)
+                            if (this.OnViewPushed != null)
                             {
-                                this.ViewPushed(this, new PushViewEventArgs(new ImagesView(new ImagesViewmodel(fileHandle, imageDatas))));
+                                this.OnViewPushed(this, new PushViewEventArgs(new ImagesView(new ImagesViewmodel(fileHandle, imageDatas))));
+                            }
+                        }
+                        else
+                        {
+                            if (this.OnNotifyUser != null)
+                            {
+                                this.OnNotifyUser(this, new NotifyUserEventArgs("No image data found in file!"));
                             }
                         }
                     }

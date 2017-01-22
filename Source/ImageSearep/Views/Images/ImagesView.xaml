@@ -9,36 +9,65 @@
              d:DesignHeight="300" d:DesignWidth="300">
     
     <UserControl.Resources>
-        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="6*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="Embedded Images" FontSize="18" FontFamily="Verdana" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="Embedded Images" Background="LightGray" FontSize="18" FontFamily="Verdana" FontWeight="Bold" TextAlignment="Center"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding EmbeddedImageInfos}" SelectedItem="{Binding SelectedEmbeddedImage}">
+        <ListBox Grid.Row="1" ItemsSource="{Binding EmbeddedImageInfos}" SelectedItem="{Binding SelectedEmbeddedImage}" 
+                 HorizontalContentAlignment="Stretch" Background="Gainsboro">
             <ListBox.Resources>
                 <converters:ImageToBitmapSourceConverter x:Key="BitmapSourceConverter"/>
             </ListBox.Resources>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <StackPanel>
+                                    <Separator x:Name="Separator" Height="5"/>
+                                    <ContentPresenter/>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                        <Setter Property="Visibility" TargetName="Separator" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="128" Height="128" x:Name="Container">
+                    <Grid Width="128" Height="128" x:Name="Container" HorizontalAlignment="Center">
                         <Image Source="{Binding ImageData.Image, Converter={StaticResource BitmapSourceConverter}}" Stretch="Uniform" 
                                MaxWidth="{Binding ElementName=Container, Path=ActualWidth}"
                                MaxHeight="{Binding ElementName=Container, Path=ActualHeight}"
-                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <Button Grid.Row="2" Visibility="{Binding SelectedEmbeddedImage, Converter={StaticResource NullToVisibilityConverter}}" Command="{Binding ViewSelectedImageDataInDetailCommand}" FontSize="24" Content="Edit"/>
-        <Button Grid.Row="3" Content="Go Back" FontSize="24"/>
+        <Button Grid.Row="2" Style="{StaticResource MaterialDesignRaisedLightButton}" 
+                Visibility="{Binding SelectedEmbeddedImage, Converter={StaticResource NullToVisibilityConverter}}" 
+                Command="{Binding ViewSelectedImageDataInDetailCommand}" Content="Edit"/>
+        <Button Grid.Row="3" Style="{StaticResource MaterialDesignRaisedDarkButton}" Command="{Binding GoBackCommand}" Content="Go Back"/>
     </Grid>
 </UserControl>

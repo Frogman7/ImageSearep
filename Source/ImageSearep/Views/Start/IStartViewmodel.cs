@@ -6,6 +6,10 @@
     {
         string ChosenFilePath { get; }
 
+        bool FileSelected { get; }
+
+        bool Processing { get; }
+
         ICommand ChooseFileCommand { get; }
 
         ICommand FindImagesInFileCommand { get; }

@@ -1,6 +1,5 @@
 ﻿namespace ImageSearep.Models
 {
-    using System;
     using System.Drawing;
 
     using PropertyChanged;
@@ -12,7 +11,7 @@
 
         public byte[] ImageBinary { get; }
 
-        public abstract bool ReplaceImage(string newImageData);
+        public abstract bool ReplaceImage(byte[] newImageData);
 
         public abstract string FileExtension { get; }
 

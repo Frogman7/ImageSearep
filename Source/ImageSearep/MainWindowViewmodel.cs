@@ -4,9 +4,9 @@
 
     public class MainWindowViewmodel
     {
-        public IViewNavigator ViewNavigator { get; }
+        public IViewManager ViewNavigator { get; }
 
-        public MainWindowViewmodel(IViewNavigator viewNavigator)
+        public MainWindowViewmodel(IViewManager viewNavigator)
         {
             this.ViewNavigator = viewNavigator;
         }

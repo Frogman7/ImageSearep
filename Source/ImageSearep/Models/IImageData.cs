@@ -8,7 +8,7 @@
 
         byte[] ImageBinary { get; }
 
-        bool ReplaceImage(string newImageData);
+        bool ReplaceImage(byte[] newImageData);
 
         string FileExtension { get; }
     }

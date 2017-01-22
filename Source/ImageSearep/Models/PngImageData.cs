@@ -16,16 +16,14 @@
 
         public override Image Image { get; protected set; }
 
-        public override bool ReplaceImage(string newImageData)
+        public override bool ReplaceImage(byte[] newImageData)
         {
-            var newImageBytes = Convert.FromBase64String(newImageData);
-
-            if (newImageBytes.Length > this.ImageBinary.Length)
+            if (newImageData.Length > this.ImageBinary.Length)
             {
                 return false;
             }
 
-            Array.Copy(newImageBytes, this.ImageBinary, newImageData.Length);
+            Array.Copy(newImageData, this.ImageBinary, newImageData.Length);
 
             this.Image = this.BytesToImage(this.ImageBinary);
 
