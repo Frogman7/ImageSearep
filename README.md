@@ -2,7 +2,7 @@
 Stands for "Image Search And Replace" this tool can be used to search for supported image types in a binary file and allows the user to replace them with images of the same type granted they are the same size or smaller than the original image they are replacing.  At this time only PNG images are supported.
 
 ### Note
-Please do not use this application unless you've safely made a backup, this could irrevocably ruin the file you're working on and I take no responsibility for loss of data.  *Emphasize*Use at your own risk!!!*Emphasize*
+Please do not use this application unless you've safely made a backup, this could irrevocably ruin the file you're working on and I take no responsibility for loss of data.  *Use at your own risk!!!*
 
 ## Status
 The application is stable to the best of my knowledge and works great when replacing PNG images (in WPF application at least).
