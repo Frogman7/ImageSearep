@@ -1,6 +1,7 @@
 ﻿namespace ImageSearep.Views
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
     using System.Threading.Tasks;
@@ -18,8 +19,12 @@
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StartViewmodel()
+        private IEnumerable<IImageFinder> imageFinders;
+
+        public StartViewmodel(IEnumerable<IImageFinder> imageFinders)
         {
+            this.imageFinders = imageFinders;
+
             this.ChooseFileCommand = new DelegateCommand(this.SetChoosenFileFromFileOpenDialog);
             this.FindImagesInFileCommand = new DelegateCommand(async () => await this.FindSupportImagesInFile());
 
@@ -45,6 +50,7 @@
         private void SetChoosenFileFromFileOpenDialog()
         {
             var openFileDialog = new OpenFileDialog();
+
             if (openFileDialog.ShowDialog() == true)
             {
                 this.ChosenFilePath = openFileDialog.FileName;
@@ -66,9 +72,21 @@
 
                     if (binaryData != null && binaryData.Length > 0)
                     {
-                        var pngImageFinder = new PngImageFinder();
+                        var imageFindTasks = new List<Task<IEnumerable<EmbeddedImageInfo>>>();
 
-                        var imageDatas = await pngImageFinder.FindImages(binaryData);
+                        foreach (var imageFinder in this.imageFinders)
+                        {
+                            imageFindTasks.Add(imageFinder.FindImages(binaryData));
+                        }
+
+                        await Task.WhenAll(imageFindTasks);
+
+                        var imageDatas = new List<EmbeddedImageInfo>();
+
+                        foreach (var finishedResult in imageFindTasks)
+                        {
+                            imageDatas.AddRange(await finishedResult);
+                        }
 
                         this.Processing = false;
 

@@ -2,6 +2,7 @@
 
 namespace ImageSearep
 {
+    using ImageSearep.Models;
     using ImageSearep.Navigation;
     using ImageSearep.Views;
 
@@ -17,7 +18,10 @@ namespace ImageSearep
             var viewNavigator = new ViewManager();
             this.DataContext = new MainWindowViewmodel(viewNavigator);
 
-            viewNavigator.PushView(new StartView(new StartViewmodel()));
+            // TODO: Find a beter way of initializing image finders
+            var imageFinders = new IImageFinder[] { new PngImageFinder(), new JpgImageFinder() };
+
+            viewNavigator.PushView(new StartView(new StartViewmodel(imageFinders)));
         }
     }
 }
